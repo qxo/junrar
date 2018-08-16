@@ -30,8 +30,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.github.junrar.exception.RarException;
 import com.github.junrar.exception.RarException.RarExceptionType;
@@ -65,7 +66,7 @@ import com.github.junrar.unpack.Unpack;
  */
 public class Archive implements Closeable, Iterable<FileHeader> {
 
-	private static Logger logger = Logger.getLogger(Archive.class.getName());
+	private static final Log logger = LogFactory.getLog(Archive.class.getName());
 
 	private static int MAX_HEADER_SIZE = 20971520;//20MB
 
@@ -152,8 +153,7 @@ public class Archive implements Closeable, Iterable<FileHeader> {
 		try {
 			readHeaders(length);
 		} catch (final Exception e) {
-			logger.log(Level.WARNING,
-					"exception in archive constructor maybe file is encrypted "
+			logger.warn("exception in archive constructor maybe file is encrypted "
 							+ "or currupt", e);
 			// ignore exceptions to allow exraction of working files in
 			// corrupt archive
@@ -455,7 +455,7 @@ public class Archive implements Closeable, Iterable<FileHeader> {
 					break;
 				}
 				default:
-					logger.warning("Unknown Header");
+					logger.warn("Unknown Header");
 					throw new RarException(RarExceptionType.notRarArchive);
 
 				}
